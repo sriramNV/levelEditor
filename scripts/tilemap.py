@@ -23,18 +23,6 @@ class Tilemap:
         self.tilemap = {}
         self.offgridTiles = []
 
-        for i in range(10):
-            self.tilemap[str(3 + i) + ";10"] = {
-                "type": "grass",
-                "variant": 1,
-                "pos": (3 + i, 10),
-            }
-            self.tilemap["10;" + str(5 + i)] = {
-                "type": "stone",
-                "variant": 1,
-                "pos": (10, 5 + i),
-            }
-
     def tilesAround(self, pos):
         tiles = []
         tileLoc = (int(pos[0] // self.tileSize), int(pos[1] // self.tileSize))
