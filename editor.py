@@ -29,10 +29,9 @@ class Editor:
 
         self.tilemap = Tilemap(self, tileSize=16)
 
-        self.tilemap.load("map.json")
-
+        self.scroll = [0, 0]
         try:
-            self.scroll = [0, 0]
+            self.tilemap.load("map.json")
         except FileNotFoundError:
             pass
 
@@ -168,6 +167,9 @@ class Editor:
                         self.shift = True
                     if event.key == pygame.K_o:
                         self.tilemap.save("map.json")
+                    if event.key == pygame.K_t:
+                        self.tilemap.autotile()
+
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_a:
                         self.movement[0] = False
