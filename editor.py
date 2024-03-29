@@ -84,6 +84,16 @@ class Editor:
                 tile_loc = str(tile_pos[0]) + ";" + str(tile_pos[1])
                 if tile_loc in self.tilemap.tilemap:
                     del self.tilemap.tilemap[tile_loc]
+                for tile in self.tilemap.offgridTiles.copy():
+                    tile_img = self.assets[tile["type"]][tile["variant"]]
+                    tile_r = pygame.Rect(
+                        tile["pos"][0] - self.scroll[0],
+                        tile["pos"][1] - self.scroll[1],
+                        tile_img.get_width(),
+                        tile_img.get_height(),
+                    )
+                    if tile_r.collidepoint(mpos):
+                        self.tilemap.offgridTiles.remove(tile)
 
             self.display.blit(current_tile_img, (5, 5))
 
@@ -95,6 +105,17 @@ class Editor:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.clicking = True
+                        if not self.ongrid:
+                            self.tilemap.offgridTiles.append(
+                                {
+                                    "type": self.tile_list[self.tile_group],
+                                    "variant": self.tile_variant,
+                                    "pos": (
+                                        mpos[0] + self.scroll[0],
+                                        mpos[1] + self.scroll[1],
+                                    ),
+                                }
+                            )
                     if event.button == 3:
                         self.right_clicking = True
                     if self.shift:
@@ -123,17 +144,7 @@ class Editor:
                 if event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:
                         self.clicking = False
-                        if not self.ongrid:
-                            self.tilemap.offgridTiles.append(
-                                {
-                                    "type": self.tile_list[self.tile_group],
-                                    "variant": self.tile_variant,
-                                    "pos": (
-                                        mpos[0] + self.scroll[0],
-                                        mpos[1] + self.scroll[1],
-                                    ),
-                                }
-                            )
+
                     if event.button == 3:
                         self.right_clicking = False
 
