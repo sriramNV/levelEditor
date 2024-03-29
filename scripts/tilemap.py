@@ -53,11 +53,11 @@ class Tilemap:
                         ),
                     )
 
-    # for tile in self.offgridTiles:
-    # surface.blit(
-    #     self.game.assets[tile["type"]][tile["variant"]],
-    #     (tile["pos"][0] - offset[0].tile["pos"][1] - offset[1]),
-    # )
+        for tile in self.offgridTiles:
+            surface.blit(
+                self.game.assets[tile["type"]][tile["variant"]],
+                (tile["pos"][0] - offset[0], tile["pos"][1] - offset[1]),
+            )
 
     # for location in self.tilemap:
     #     tile = self.tilemap[location]
