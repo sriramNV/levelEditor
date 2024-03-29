@@ -16,6 +16,10 @@ NEIGHBOUR_OFFSETS = [
 
 PHYSICS_TILE = {"grass", "stone"}
 
+AUTOTILE_MAP = {}
+
+AUTOTILE_TYPES = {"grass", "stone"}
+
 
 class Tilemap:
     def __init__(self, game, tileSize=16):
@@ -60,6 +64,7 @@ class Tilemap:
                         ),
                     )
 
+    # not needed anymore
     # for location in self.tilemap:
     #     tile = self.tilemap[location]
     #     surface.blit(
@@ -96,5 +101,24 @@ class Tilemap:
         )
         f.close()
 
-    def load(self):
-        pass
+    def load(self, path):
+        f = open(path, "r")
+        map_data = json.load(f)
+        f.close()
+
+        self.tilemap = map_data["tilemap"]
+        self.tileSize = map_data["tile_size"]
+        self.offgridTiles = map_data["offgrid"]
+
+    def autotile(self):
+        for loc in self.tilemap:
+            tile = self.tilemap[loc]
+            neighbour = set()
+            for shift in [(1, 0), (-1, 0), (0, -1), (0, 1)]:
+                check_loc = (
+                    str(tile["pos"][0] + shift[0])
+                    + ";"
+                    + str(tile["pos"][1] + shift[1])
+                )
+            if check_loc in self.tilemap:
+                pass
