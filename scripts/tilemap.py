@@ -1,3 +1,4 @@
+import json
 import pygame
 
 
@@ -34,6 +35,12 @@ class Tilemap:
         return tiles
 
     def render(self, surface, offset=(0, 0)):
+        for tile in self.offgridTiles:
+            surface.blit(
+                self.game.assets[tile["type"]][tile["variant"]],
+                (tile["pos"][0] - offset[0], tile["pos"][1] - offset[1]),
+            )
+
         for x in range(
             offset[0] // self.tileSize,
             (offset[0] + surface.get_width()) // self.tileSize + 1,
@@ -52,12 +59,6 @@ class Tilemap:
                             tile["pos"][1] * self.tileSize - offset[1],
                         ),
                     )
-
-        for tile in self.offgridTiles:
-            surface.blit(
-                self.game.assets[tile["type"]][tile["variant"]],
-                (tile["pos"][0] - offset[0], tile["pos"][1] - offset[1]),
-            )
 
     # for location in self.tilemap:
     #     tile = self.tilemap[location]
@@ -82,3 +83,18 @@ class Tilemap:
                     )
                 )
         return rects
+
+    def save(self, path):
+        f = open(path, "w")
+        json.dump(
+            {
+                "tilemap": self.tilemap,
+                "tile_size": self.tileSize,
+                "offgrid": self.offgridTiles,
+            },
+            f,
+        )
+        f.close()
+
+    def load(self):
+        pass
